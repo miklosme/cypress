@@ -66,6 +66,7 @@ module.exports = (Commands, Cypress, cy, state, config) ->
             onRetry: resolveFocused
           })
 
+    # TODO: add `cy.xpath` in this file
     get: (selector, options = {}) ->
       ctx = @
 

@@ -276,7 +276,9 @@ export default class AutIframe {
     if (selectorPlaygroundModel.method === 'get') {
       selector = Cypress.SelectorPlayground.getSelector($el)
     } else {
-      selector = Cypress.SelectorPlayground.getXPathSelector($el)
+      const innerDocument = this._contents().get(0)
+
+      selector = Cypress.SelectorPlayground.getXPathSelector($el, dom.evalXPath.bind(null, innerDocument))
     }
 
     dom.addOrUpdateSelectorPlaygroundHighlight({

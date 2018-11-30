@@ -36,17 +36,29 @@ module.exports = {
       selectorTypes: defaults.selectorPriority
     })
 
-  getXPathSelector: ($el) ->
+  # mark
+  getXPathSelector: ($el, queryXPath) ->
     results = []
+    isUniqueXPath = (query) -> queryXPath(query).length == 1
+    componentNameSelector = (name) -> "//*[@data-ui=\"#{name}\"]"
 
     $current = $el
+    xPathQuery = ''
     while $current.length
       uiComponent = $current.data('ui')
       if _.isString(uiComponent)
         results.push(uiComponent)
+
+      xPathQuery = results.reverse().map(componentNameSelector).join('')
+
+#      if isUniqueXPath(xPathQuery)
+#        break
+
+      console.log queryXPath(xPathQuery)
+
       $current = $current.parent()
 
-    results.reverse().map((name) -> "//*[@data-ui=\"#{name}\"]").join('')
+    return xPathQuery
 
   defaults: (props) ->
     if not _.isPlainObject(props)

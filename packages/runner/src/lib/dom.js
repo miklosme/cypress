@@ -372,6 +372,17 @@ function scrollIntoView (win, el) {
   el.scrollIntoView()
 }
 
+function evalXPath (innerDocument, selector) {
+  const headings = innerDocument.evaluate(selector, innerDocument, null, XPathResult.ANY_TYPE, null)
+  const matches = []
+
+  for (let i = headings.iterateNext(); i; i = headings.iterateNext()) {
+    matches.push(i)
+  }
+
+  return matches
+}
+
 const sizzleRe = /sizzle/i
 
 function getElementsForSelector ({ root, selector, method, cypressDom }) {
@@ -385,12 +396,7 @@ function getElementsForSelector ({ root, selector, method, cypressDom }) {
       }
     } else if (method === 'xpath') {
       const innerDocument = root.get(0)
-      const headings = innerDocument.evaluate(selector, innerDocument, null, XPathResult.ANY_TYPE, null)
-      const matches = []
-
-      for (let i = headings.iterateNext(); i; i = headings.iterateNext()) {
-        matches.push(i)
-      }
+      const matches = evalXPath(innerDocument, selector);
 
       $el = $(matches)
     } else {
@@ -471,4 +477,5 @@ export default {
   getElementsForSelector,
   getOuterSize,
   scrollIntoView,
+  evalXPath,
 }
