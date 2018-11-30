@@ -36,6 +36,18 @@ module.exports = {
       selectorTypes: defaults.selectorPriority
     })
 
+  getXPathSelector: ($el) ->
+    results = []
+
+    $current = $el
+    while $current.length
+      uiComponent = $current.data('ui')
+      if _.isString(uiComponent)
+        results.push(uiComponent)
+      $current = $current.parent()
+
+    results.reverse().map((name) -> "//*[@data-ui=\"#{name}\"]").join('')
+
   defaults: (props) ->
     if not _.isPlainObject(props)
       $utils.throwErrByPath("selector_playground.defaults_invalid_arg", {

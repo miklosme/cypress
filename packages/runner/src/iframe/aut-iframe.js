@@ -271,7 +271,13 @@ export default class AutIframe {
 
     const Cypress = eventManager.getCypress()
 
-    const selector = Cypress.SelectorPlayground.getSelector($el)
+    let selector
+
+    if (selectorPlaygroundModel.method === 'get') {
+      selector = Cypress.SelectorPlayground.getSelector($el)
+    } else {
+      selector = Cypress.SelectorPlayground.getXPathSelector($el)
+    }
 
     dom.addOrUpdateSelectorPlaygroundHighlight({
       $el,
@@ -279,8 +285,11 @@ export default class AutIframe {
       $body,
       showTooltip: true,
       onClick: () => {
+        if (selectorPlaygroundModel.method === 'contains') {
+          selectorPlaygroundModel.resetMethod()
+        }
+
         selectorPlaygroundModel.setNumElements(1)
-        selectorPlaygroundModel.resetMethod()
         selectorPlaygroundModel.setSelector(selector)
       },
     })

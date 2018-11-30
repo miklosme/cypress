@@ -1,12 +1,14 @@
 import { action, computed, observable } from 'mobx'
 
-const methods = ['get', 'contains']
+// TODO: let the user config if prefer xpath over css selector
+const methods = ['xpath', 'get', 'contains']
 
 class SelectorPlaygroundModel {
   methods = methods
 
   @observable getSelector = 'body'
   @observable containsSelector = 'Hello, World'
+  @observable xpathSelector = '/html/body'
   @observable isOpen = false
   @observable isEnabled = false
   @observable isShowingHighlight = false
@@ -15,7 +17,16 @@ class SelectorPlaygroundModel {
   @observable method = methods[0]
 
   @computed get selector () {
-    return this.method === 'get' ? this.getSelector : this.containsSelector
+    switch (this.method) {
+      case 'get':
+        return this.getSelector
+      case 'contains':
+        return this.containsSelector
+      case 'xpath':
+        return this.xpathSelector
+      default:
+        throw new Error('unknown selector method')
+    }
   }
 
   @computed get infoHelp () {
@@ -55,6 +66,8 @@ class SelectorPlaygroundModel {
   @action setSelector (selector) {
     if (this.method === 'get') {
       this.getSelector = selector
+    } else if (this.method === 'xpath') {
+      this.xpathSelector = selector
     } else {
       this.containsSelector = selector
     }

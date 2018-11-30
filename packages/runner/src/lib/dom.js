@@ -383,6 +383,16 @@ function getElementsForSelector ({ root, selector, method, cypressDom }) {
       if ($el.length) {
         $el = cypressDom.getFirstDeepestElement($el)
       }
+    } else if (method === 'xpath') {
+      const innerDocument = root.get(0)
+      const headings = innerDocument.evaluate(selector, innerDocument, null, XPathResult.ANY_TYPE, null)
+      const matches = []
+
+      for (let i = headings.iterateNext(); i; i = headings.iterateNext()) {
+        matches.push(i)
+      }
+
+      $el = $(matches)
     } else {
       $el = root.find(selector)
     }
