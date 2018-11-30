@@ -14,6 +14,7 @@ cypress.zip
 tmp/
 .nyc_output
 .vscode/settings.json
+.idea
 
 # from extension
 Cached Theme.pak
