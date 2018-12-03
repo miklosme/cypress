@@ -273,12 +273,22 @@ export default class AutIframe {
 
     let selector
 
-    if (selectorPlaygroundModel.method === 'get') {
-      selector = Cypress.SelectorPlayground.getSelector($el)
-    } else {
-      const innerDocument = this._contents().get(0)
+    try {
 
-      selector = Cypress.SelectorPlayground.getXPathSelector($el, dom.evalXPath.bind(null, innerDocument))
+      if (selectorPlaygroundModel.method === 'get') {
+        selector = Cypress.SelectorPlayground.getSelector($el)
+      } else {
+        const innerDocument = this._contents().get(0)
+
+        selector = Cypress.SelectorPlayground.getXPathSelector($el, innerDocument)
+      }
+
+    } catch (err) {
+      /* eslint-disable no-console */
+      console.error(err)
+      selectorPlaygroundModel.setValidity(false)
+
+      return
     }
 
     dom.addOrUpdateSelectorPlaygroundHighlight({

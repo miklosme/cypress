@@ -1,5 +1,6 @@
 _ = require("lodash")
 uniqueSelector = require("@cypress/unique-selector").default
+uniqueXPathSelector = require("../unique-xpath-selector")
 
 $utils = require("./utils")
 
@@ -36,29 +37,7 @@ module.exports = {
       selectorTypes: defaults.selectorPriority
     })
 
-  # mark
-  getXPathSelector: ($el, queryXPath) ->
-    results = []
-    isUniqueXPath = (query) -> queryXPath(query).length == 1
-    componentNameSelector = (name) -> "//*[@data-ui=\"#{name}\"]"
-
-    $current = $el
-    xPathQuery = ''
-    while $current.length
-      uiComponent = $current.data('ui')
-      if _.isString(uiComponent)
-        results.push(uiComponent)
-
-      xPathQuery = results.reverse().map(componentNameSelector).join('')
-
-#      if isUniqueXPath(xPathQuery)
-#        break
-
-      console.log queryXPath(xPathQuery)
-
-      $current = $current.parent()
-
-    return xPathQuery
+  getXPathSelector: ($el, innerDocument) -> uniqueXPathSelector($el.get(0), innerDocument)
 
   defaults: (props) ->
     if not _.isPlainObject(props)
