@@ -25,7 +25,7 @@ function getSiblingPosition(element) {
     let counter = 0;
     for (let i = 0; i < childNodes.length; i++) {
       let sibling = childNodes[i];
-      if (isElement(sibling)) {
+      if (isElement(sibling) && sibling.tagName === element.tagName) {
         counter++;
         if (sibling === element) {
           return counter;
