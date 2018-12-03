@@ -51,6 +51,13 @@ function isElement(el) {
   return isElem;
 }
 
+const allowedDataAttributes = [
+  "ui",
+  "test",
+  "field-name",
+  "field-path"
+];
+
 function uniqueXPathSelector(el, innerDocument) {
   const results = [];
   let current = el;
@@ -58,6 +65,11 @@ function uniqueXPathSelector(el, innerDocument) {
     if (current.nodeType === Node.ELEMENT_NODE) {
       const tagName = current.tagName.toLowerCase().replace(/:/g, "\\:");
       const segments = [];
+
+      allowedDataAttributes.filter(attr => current.dataset[attr]).forEach(attr => {
+        segments.push(`@data-${attr}="${current.dataset[attr]}"`)
+      })
+
       const siblingPosition = getSiblingPosition(current);
       if (siblingPosition !== null) {
         segments.push(siblingPosition);
